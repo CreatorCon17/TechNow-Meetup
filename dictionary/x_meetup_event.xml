@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element extends="task" label="Event" max_length="40" name="x_meetup_event" type="collection">
+        <element attributes="omit_sys_original=true" label="Cost per person" max_length="20" name="cost_per_person" type="currency"/>
+        <element label="Max persons" max_length="40" name="max_persons" type="integer"/>
+    </element>
+</database>

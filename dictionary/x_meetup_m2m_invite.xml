@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Invite" max_length="40" name="x_meetup_m2m_invite" type="collection">
+        <element choice="1" label="Response" max_length="40" name="response" type="choice">
+            <choice>
+                <element label="Going" sequence="0" value="Going"/>
+                <element label="Not going" sequence="1" value="Not going"/>
+                <element label="Stand by" sequence="2" value="Stand by"/>
+            </choice>
+        </element>
+        <element label="Event" max_length="32" name="u_event" reference="x_meetup_event" type="reference"/>
+        <element label="User" max_length="32" name="u_user" reference="sys_user" type="reference"/>
+        <index name="index">
+            <element name="u_event"/>
+        </index>
+        <index name="index2">
+            <element name="u_user"/>
+        </index>
+    </element>
+</database>

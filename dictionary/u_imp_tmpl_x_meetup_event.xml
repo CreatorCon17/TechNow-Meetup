@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element extends="sys_import_set_row" label="Imp Tmpl X Meetup Event" max_length="40" name="u_imp_tmpl_x_meetup_event" type="collection">
+        <element attributes="import_attribute_name=Cost per person" label="Cost per person" max_length="20" name="u_cost_per_person" type="integer"/>
+        <element attributes="import_attribute_name=Description,edge_encryption_enabled=true" label="Description" max_length="4000" name="u_description" type="string"/>
+        <element attributes="import_attribute_name=End" label="End" max_length="40" name="u_end" type="glide_date_time"/>
+        <element attributes="import_attribute_name=Event name,edge_encryption_enabled=true" label="Event name" max_length="40" name="u_event_name" type="string"/>
+        <element attributes="import_attribute_name=Location,edge_encryption_enabled=true" label="Location" max_length="32" name="u_location" type="string"/>
+        <element attributes="import_attribute_name=Max persons" label="Max persons" max_length="40" name="u_max_persons" type="integer"/>
+        <element attributes="import_attribute_name=Organizer,edge_encryption_enabled=true" label="Organizer" max_length="40" name="u_organizer" type="string"/>
+        <element attributes="import_attribute_name=Start" label="Start" max_length="40" name="u_start" type="glide_date_time"/>
+        <element attributes="import_attribute_name=State,edge_encryption_enabled=true" label="State" max_length="40" name="u_state" type="string"/>
+    </element>
+</database>

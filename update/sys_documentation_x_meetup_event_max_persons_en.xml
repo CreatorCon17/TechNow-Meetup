@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_documentation element="max_persons" label="Max persons" language="en" table="x_meetup_event">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>max_persons</element>
+            <help/>
+            <hint/>
+            <label>Max persons</label>
+            <language>en</language>
+            <name>x_meetup_event</name>
+            <plural>Max persons</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>chuck.tomasi</sys_created_by>
+            <sys_created_on>2017-05-09 20:30:46</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_id>ec22408367223200e6135bb557415a8c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Max persons</sys_name>
+            <sys_package display_value="Meetup" source="x_meetup">3641480367223200e6135bb557415af6</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Meetup">3641480367223200e6135bb557415af6</sys_scope>
+            <sys_update_name>sys_documentation_x_meetup_event_max_persons_en</sys_update_name>
+            <sys_updated_by>chuck.tomasi</sys_updated_by>
+            <sys_updated_on>2017-05-09 20:30:46</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>
