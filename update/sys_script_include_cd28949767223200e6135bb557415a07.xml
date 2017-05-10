@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_meetup.InviteManager</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>InviteManager</name>
+        <script><![CDATA[var InviteManager = Class.create();
+InviteManager.prototype = {
+	initialize: function(eventID, userID) {
+		this.inviteTable = 'x_meetup_m2m_invite';
+		this.eventTable  = 'x_meetup_event';
+		this.eventID = eventID;
+		this.userID = userID;
+	},
+
+	/*
+     * determine if the user is already on the invite for this event
+	 *
+	 * @param none
+	 * @return sys_id of invite record (null=not found)
+	 *
+     */
+	userOnList : function() {
+
+		var invite = new GlideRecord(this.inviteTable);
+		invite.addQuery('u_user', this.userID);
+		invite.addQuery('u_event', this.eventID);
+		invite.query();
+
+		if (invite.next()) {
+			return invite.sys_id;
+		}
+
+		return;
+	},
+	
+	/*
+	 * get the user's response if there is one
+	 *
+	 * @param none
+	 * @return choice list option
+	 *
+	 */
+	getUserResponse : function() {
+	
+		var invite = new GlideRecord(this.inviteTable);
+		invite.addQuery('u_user', this.userID);
+		invite.addQuery('u_event', this.eventID);
+		invite.query();
+		
+		if (invite.next()) {
+			return invite.getValue('response');
+		}
+		
+		return '';
+	},
+
+	/*
+     * make a new invite for this user
+	 *
+	 * @param string (Going, Not going)
+	 * @return string (Going, Not going, Stand by)
+	 * 
+     */
+	createInvite : function(response) {
+
+		var invite = new GlideRecord(this.inviteTable);
+		invite.newRecord();
+		invite.u_user = this.userID;
+		invite.u_event = this.eventID;
+
+		if (response == 'Going') {
+			var currentCap = this._currentCapacity();
+			var eventCap = parseInt(this._eventCapacity(), 10);
+
+			if (currentCap >= eventCap && eventCap > 0) {
+				response = 'Stand by';
+			}
+
+		}
+		invite.response = response;
+		invite.insert();
+
+		return response;
+	},
+
+	/*
+	 * update an existing invite record
+	 *
+	 * @param sys_id - sys_id of the invite record to update
+	 * @param string - intended response (Going, Not going)
+	 * @return string - actual response (Going, Not going, Stand by)
+	 *
+	 */
+	updateInvite : function(inviteID, response) {
+
+		var invite = new GlideRecord(this.inviteTable);
+		if (!inviteID) {
+			invite.addQuery('u_user', this.userID);
+			invite.addQuery('u_event', this.eventID);
+			invite.query();
+			invite.next();
+		} else {
+			invite.get(inviteID);
+		}
+
+		if (response == 'Going') {
+			var currentCap = this._currentCapacity();
+			var eventCap = this._eventCapacity();
+			
+			if (currentCap >= eventCap && eventCap > 0) {
+				response = 'Stand by';
+			}
+		}
+
+		invite.response = response;
+		invite.update();
+
+		return response;
+	},
+
+	/*
+	 * get the current capacity for this event
+	 *
+	 * @param none
+	 * @return number - number of people also going to this event
+	 *
+	 */
+	_currentCapacity : function() {
+
+		var currentCap = 0;
+		var ga = new GlideAggregate(this.inviteTable);
+		ga.addQuery('u_event', this.eventID);
+		ga.addQuery('response', 'Going');
+		ga.addAggregate('COUNT');
+		ga.query();
+
+		if (ga.next()) {
+			currentCap = ga.getAggregate('COUNT');
+		}
+
+		return parseInt(currentCap, 10);
+
+	},
+
+	/*
+	 * get capacity count for the event
+	 *
+	 * @param none
+	 * @return number - value of the event's max_persons
+	 *
+	 */
+	_eventCapacity : function() {
+
+		var e = new GlideRecord(this.eventTable);
+		e.get(this.eventID);
+
+		return parseInt(e.getValue('max_persons'), 10);
+	},
+
+	/*
+	 * get a list of email addresses to send reminders for this event
+	 *
+	 * @param none
+	 * @return string - comma separated list of email addresses
+	 *
+	 */
+	getAttendeeList : function() {
+		var userList = [];
+		var invite = new GlideRecord(this.inviteTable);
+		invite.addQuery('u_event', this.eventID);
+		invite.addQuery('response', 'Going');
+		invite.query();
+
+		while (invite.next()) {
+			userList.push(invite.u_user.email);
+		}
+
+		return userList.join(',');
+	},
+
+	type: 'InviteManager'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>chuck.tomasi</sys_created_by>
+        <sys_created_on>2017-05-10 16:47:23</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>cd28949767223200e6135bb557415a07</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>InviteManager</sys_name>
+        <sys_package display_value="Meetup" source="x_meetup">3641480367223200e6135bb557415af6</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Meetup">3641480367223200e6135bb557415af6</sys_scope>
+        <sys_update_name>sys_script_include_cd28949767223200e6135bb557415a07</sys_update_name>
+        <sys_updated_by>chuck.tomasi</sys_updated_by>
+        <sys_updated_on>2017-05-10 16:47:23</sys_updated_on>
+    </sys_script_include>
+</record_update>

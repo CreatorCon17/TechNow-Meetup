@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>weather_forecast</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[(function runMailScript(/* GlideRecord */ current, /* TemplatePrinter */ template,
+                                                     /* Optional EmailOutbound */ email, /* Optional GlideRecord */ email_action,
+                                                     /* Optional GlideRecord */ event) {
+
+     try {
+          var r = new sn_ws.RESTMessageV2('x_meetup.Get Weather', 'Forecast');
+          var gdt = new GlideDateTime(current.work_start);
+          
+          r.setStringParameterNoEscape('date', gdt.getDate());
+          
+          var response = r.execute();
+          var responseBody = response.getBody();
+          var httpStatus = response.getStatusCode();
+          
+          var forecast = JSON.parse(responseBody);
+          
+          template.print('The forecast is: ' + forecast.result.skies + ' and ' + forecast.result.temp.hi + forecast.result.units);
+     }
+     catch(ex) {
+          var message = ex.getMessage();
+     }
+
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>chuck.tomasi</sys_created_by>
+        <sys_created_on>2017-05-10 16:56:21</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>71991c9767223200e6135bb557415a3b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>weather_forecast</sys_name>
+        <sys_package display_value="Meetup" source="x_meetup">3641480367223200e6135bb557415af6</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Meetup">3641480367223200e6135bb557415af6</sys_scope>
+        <sys_update_name>sys_script_email_71991c9767223200e6135bb557415a3b</sys_update_name>
+        <sys_updated_by>chuck.tomasi</sys_updated_by>
+        <sys_updated_on>2017-05-10 16:56:21</sys_updated_on>
+    </sys_script_email>
+</record_update>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function($scope, $http) {
+	/* widget controller */
+	var c = this;
+
+	$scope.sendResponse = function(eventIndex, intent) {
+		var reqBody = {
+			"event" : c.data.eventList[eventIndex].eventID,
+			"user" : c.data.userID,
+			"intent" : intent
+		};
+
+		$http({
+			method : "POST",
+			url : "/api/x_meetup/response",
+			headers : {"Content-type" : "application/json"},
+			data : reqBody
+		}).then(function success(response) {
+			console.log('sendResponse(): success');
+			$scope.data.eventList[eventIndex].response = response.data.result.actual;
+		}, function failure(response) {
+			console.log('sendResponse(): failure');
+		});
+	}
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.title {
+  float : left;
+  font-size : 18px;
+  font-weight: bold;
+}
+
+.cost {
+  float : right;
+  background-color:#428bca;
+  color:#fff;
+  border-radius:15px;
+  padding: 5px;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>meetup_list</id>
+        <internal>false</internal>
+        <link/>
+        <name>Meetup list</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+
+	data.eventList = [];
+	data.userID = gs.getUserID();
+	var n = 0;
+	
+	var e = new GlideRecord('x_meetup_event');
+	e.addQuery('active', true);
+	e.addQuery('state', '!=', 1);
+	e.orderBy('work_start');
+	e.query();
+	
+	while (e.next()) {
+		var eObj = {};
+		eObj.eventID     = e.getValue('sys_id');
+		eObj.name        = e.getDisplayValue();
+		eObj.start       = e.work_start.getDisplayValue();
+		eObj.organizer   = e.assigned_to.getDisplayValue();
+		eObj.location    = e.location.getDisplayValue();
+		eObj.cost        = e.getDisplayValue('cost_per_person');
+		eObj.description = e.getValue('description');
+		eObj.index       = n;
+
+		var im = new InviteManager(e.getValue('sys_id'), data.userID);
+		eObj.response = im.getUserResponse();
+		data.eventList.push(eObj);
+		n++;
+	}
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>chuck.tomasi</sys_created_by>
+        <sys_created_on>2017-05-10 16:59:36</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>9d6bd0d767223200e6135bb557415a79</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Meetup list</sys_name>
+        <sys_package display_value="Meetup" source="x_meetup">3641480367223200e6135bb557415af6</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Meetup">3641480367223200e6135bb557415af6</sys_scope>
+        <sys_update_name>sp_widget_9d6bd0d767223200e6135bb557415a79</sys_update_name>
+        <sys_updated_by>chuck.tomasi</sys_updated_by>
+        <sys_updated_on>2017-05-10 17:10:50</sys_updated_on>
+        <template><![CDATA[<div>
+  <table class="table table-striped">
+    <tr ng-repeat="e in data.eventList">
+      <td>
+
+        <div class="title">
+          {{e.name}}
+        </div>
+
+        <div class="cost">
+          <div ng-if="e.cost == '$0.00'">
+            Free
+          </div>
+          <div ng-if="e.cost != '$0.00'">
+            {{e.cost}}/pp
+          </div>
+        </div>
+        <div style="clear: both;"></div>
+        <div>
+          <i class="fa fa-clock-o"></i> {{e.start}}
+        </div>
+        <div>
+          <i class="fa fa-map-marker" aria-hidden="true"></i>
+          {{e.location}}
+        </div>
+        <div>
+          <i class="fa fa-user" aria-hidden="true"></i>
+          {{e.organizer}}
+        </div>
+        <div>
+          {{e.description}}
+        </div>
+        <button class="btn btn-success" ng-click="sendResponse(e.index, 'Going')">
+          <span ng-if="e.response == 'Going'">
+            <i class="fa fa-check" aria-hidden="true"></i>
+          </span>
+          <span ng-if="e.response == 'Stand by'">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          </span>
+          Going
+        </button>
+        <button class="btn btn-danger" ng-click="sendResponse(e.index, 'Not going')">
+          <span ng-if="e.response == 'Not going'">
+            <i class="fa fa-check" aria-hidden="true"></i>
+          </span>
+          Not Going
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>]]></template>
+    </sp_widget>
+</record_update>
