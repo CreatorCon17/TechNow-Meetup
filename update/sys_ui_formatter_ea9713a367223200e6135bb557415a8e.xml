@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_formatter">
+    <sys_ui_formatter action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <angular_module/>
+        <formatter>x_meetup_button_colors.xml</formatter>
+        <name>Button colors</name>
+        <sys_class_name>sys_ui_formatter</sys_class_name>
+        <sys_created_by>chuck.tomasi</sys_created_by>
+        <sys_created_on>2017-05-12 01:20:42</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ea9713a367223200e6135bb557415a8e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Button colors</sys_name>
+        <sys_package display_value="Meetup" source="x_meetup">3641480367223200e6135bb557415af6</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Meetup">3641480367223200e6135bb557415af6</sys_scope>
+        <sys_update_name>sys_ui_formatter_ea9713a367223200e6135bb557415a8e</sys_update_name>
+        <sys_updated_by>chuck.tomasi</sys_updated_by>
+        <sys_updated_on>2017-05-12 01:20:42</sys_updated_on>
+        <table>x_meetup_event</table>
+        <type>formatter</type>
+    </sys_ui_formatter>
+</record_update>
